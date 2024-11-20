@@ -1,0 +1,4 @@
+repository "Sci-fi survival@nguyenconghiep0212@cloud"
+  path "/"
+    br "/main"
+    co "/main"
