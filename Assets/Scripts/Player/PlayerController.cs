@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
@@ -18,6 +19,7 @@ public class PlayerControl : MonoBehaviour
     public LayerMask npcLayer;
 
     private Player playerProperties;
+    float faceDirection = 0;
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -42,7 +44,7 @@ public class PlayerControl : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             var facingDir = new Vector3(animator.GetFloat("MoveX"), animator.GetFloat("MoveY"));
-            var interactPos = transform.position + facingDir; 
+            var interactPos = transform.position + facingDir;
 
             var collider = Physics2D.OverlapCircle(interactPos, 0.2f, npcLayer);
             if (collider)
@@ -57,7 +59,19 @@ public class PlayerControl : MonoBehaviour
         input.x = Input.GetAxisRaw("Horizontal");
         input.y = Input.GetAxisRaw("Vertical");
 
-        animator.SetFloat("MoveX", input.x);
+        if (input.x == 0)
+        {
+            if (faceDirection < 0) faceDirection = -0.01f;
+            if (faceDirection > 0) faceDirection = 0.01f;
+        }
+        else
+        {
+            faceDirection = input.x;
+        }
+
+
+        RotateWeapon(faceDirection);
+        animator.SetFloat("MoveX", faceDirection);
         animator.SetFloat("MoveY", input.y);
 
         Vector3 targetPosition = transform.position;
@@ -67,7 +81,7 @@ public class PlayerControl : MonoBehaviour
         {
             rb.velocity = new Vector2(input.x * movingSpeed, input.y * movingSpeed);
             isMoving = true;
-         }
+        }
 
         if (input == Vector2.zero)
         {
@@ -76,7 +90,7 @@ public class PlayerControl : MonoBehaviour
         animator.SetBool("isMoving", isMoving);
     }
 
- 
+
     private bool IsWalkable(Vector3 targetPosition)
     {
         if (Physics2D.OverlapCircle(targetPosition, 0.1f, solidObjectLayer | npcLayer) != null)
@@ -86,10 +100,13 @@ public class PlayerControl : MonoBehaviour
         return true;
     }
 
-    private void OnDrawGizmos()
+    private void RotateWeapon(float faceDirection)
     {
-        // Visualize the overlap area in the Scene view
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, 3f);
+        foreach (Transform child in GameManager.Instance.playerWeaponPosition)
+        {
+            Animator animator = child.GetComponent<Animator>();
+            animator.SetFloat("MoveX", faceDirection);
+        }
     }
+
 }

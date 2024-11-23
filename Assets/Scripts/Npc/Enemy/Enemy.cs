@@ -8,6 +8,8 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public bool isMoving;
+    public float maxHealth = 100;
+    public float health;
 
     [SerializeField] internal Transform targetTransform;
     [SerializeField] internal float movingSpeed = 3;
@@ -15,16 +17,27 @@ public class Enemy : MonoBehaviour
     [SerializeField] internal float attackDistance = 3;
     [SerializeField] internal LayerMask playerLayer;
 
+    [Header("FLash Damaged")]
+    [SerializeField] internal float damageFlashDuration;
+    private Material originalMaterial;
+    private SpriteRenderer spriteRenderer;
+    private Coroutine flashRoutine;
+
     internal Rigidbody2D rb;
     internal Animator animator;
 
     internal bool isPlayerInAttackZone;
+    internal bool isDead = false;
     private void Awake()
     {
         animator = GetComponent<Animator>();
         animator.SetBool("IsAttackReady", true);
 
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        originalMaterial = spriteRenderer.material;
+
         rb = GetComponent<Rigidbody2D>();
+        health = maxHealth;
     }
     // Start is called before the first frame update
     void Start()
@@ -35,12 +48,12 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-
-        MoveToPlayer();
-        CheckPlayerInAttackRange();
+        if (!isDead)
+        {
+            MoveToPlayer();
+            CheckPlayerInAttackRange();
+        }
     }
-
-
 
     public void MoveToPlayer()
     {
@@ -103,6 +116,41 @@ public class Enemy : MonoBehaviour
         {
             isPlayerInAttackZone = false;
         }
+    }
 
+    internal void TakeDamage(float damageTaken)
+    {
+        Flash();
+        health -= damageTaken;
+        if (health <= 0)
+        {
+            GameManager.Instance.killCount++;
+            GameManager.Instance.UpdateKillCount();
+            isDead = true;
+            rb.velocity = Vector2.zero;
+            animator.SetTrigger("Death");
+        }
+    }
+
+    private void Flash()
+    {
+        if (flashRoutine != null)
+        {
+            StopCoroutine(flashRoutine);
+        }
+
+        flashRoutine = StartCoroutine(DamageFlashRoutine());
+    }
+    private IEnumerator DamageFlashRoutine()
+    {
+        spriteRenderer.material = GameManager.Instance.flashDamage_Material;
+        yield return new WaitForSeconds(damageFlashDuration);
+        spriteRenderer.material = originalMaterial;
+        flashRoutine = null;
+    }
+
+    public void DestroyGameObject()
+    {
+        Destroy(gameObject);
     }
 }

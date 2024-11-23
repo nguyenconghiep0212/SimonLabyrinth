@@ -6,8 +6,7 @@ using UnityEngine;
 public class Dicer : MonoBehaviour
 {
 
-    public float maxHealth = 70;
-    public float health;
+
     public float damage = 5;
 
     Enemy baseClass;
@@ -15,18 +14,24 @@ public class Dicer : MonoBehaviour
     private void Start()
     {
         baseClass = GetComponent<Enemy>();
-        health = maxHealth;
     }
     void Update()
     {
     }
 
     public async void AttackFinish()
-    { 
+    {
         DealDamage();
         baseClass.animator.SetBool("IsAttackReady", false);
         await Task.Delay(baseClass.attackInterval);
-        baseClass.animator.SetBool("IsAttackReady", true);
+        try
+        {
+            baseClass.animator.SetBool("IsAttackReady", true);
+        }
+        catch (System.Exception error)
+        {
+            Debug.Log(gameObject.name + " has died");
+        }
     }
 
     private void DealDamage()
@@ -34,13 +39,7 @@ public class Dicer : MonoBehaviour
         if (baseClass.isPlayerInAttackZone)
         {
             GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().TakeDamage(damage);
-        } 
+        }
     }
 
-    private void OnDrawGizmos()
-    {
-        // Visualize the overlap area in the Scene view
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, baseClass.attackDistance);
-    }
 }

@@ -13,9 +13,9 @@ public class Player : MonoBehaviour
     public Image healthUI; 
     public Image manaUI;
 
-    [Header("Level")]
-    public int level = 0;
-    public int gold;
+    internal bool inCombat;
+
+  
 
     private PlayerControl playerControl;
     private void Awake()
