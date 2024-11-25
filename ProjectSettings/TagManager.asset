@@ -11,7 +11,7 @@ TagManager:
   - SolidObject
   - Water
   - UI
-  - NPC
+  - Entity
   - Player
   - 
   - 
@@ -47,6 +47,6 @@ TagManager:
   - name: Foreground
     uniqueID: 2975839227
     locked: 0
-  - name: Player
+  - name: Entities
     uniqueID: 1339089251
     locked: 0

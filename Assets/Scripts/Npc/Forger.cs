@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Forger : MonoBehaviour, NpcInteractable
+public class Forger : MonoBehaviour, EntityInterface
 {
     // Start is called before the first frame update
     void Start()

@@ -15,11 +15,11 @@ public class PlayerControl : MonoBehaviour
     private Animator animator;
     private Rigidbody2D rb;
 
-    public LayerMask solidObjectLayer;
-    public LayerMask npcLayer;
+    public LayerMask entityLayer;
 
     private Player playerProperties;
     float faceDirection = 0;
+    float interactionRange = 1f;
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -32,26 +32,15 @@ public class PlayerControl : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        InteractionKey();
+    }
+
     // Update is called once per frame 
     void FixedUpdate()
     {
         Move();
-        Interact();
-    }
-
-    private void Interact()
-    {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            var facingDir = new Vector3(animator.GetFloat("MoveX"), animator.GetFloat("MoveY"));
-            var interactPos = transform.position + facingDir;
-
-            var collider = Physics2D.OverlapCircle(interactPos, 0.2f, npcLayer);
-            if (collider)
-            {
-                collider.GetComponent<NpcInteractable>()?.Interact();
-            }
-        }
     }
 
     private void Move()
@@ -69,35 +58,18 @@ public class PlayerControl : MonoBehaviour
             faceDirection = input.x;
         }
 
-
         RotateWeapon(faceDirection);
         animator.SetFloat("MoveX", faceDirection);
         animator.SetFloat("MoveY", input.y);
 
-        Vector3 targetPosition = transform.position;
-        targetPosition += (Vector3)input;
-
-        if (IsWalkable(targetPosition))
-        {
-            rb.velocity = new Vector2(input.x * movingSpeed, input.y * movingSpeed);
-            isMoving = true;
-        }
+        rb.velocity = new Vector2(input.x * movingSpeed, input.y * movingSpeed);
+        isMoving = rb.velocity != Vector2.zero;
 
         if (input == Vector2.zero)
         {
             isMoving = false;
         }
         animator.SetBool("isMoving", isMoving);
-    }
-
-
-    private bool IsWalkable(Vector3 targetPosition)
-    {
-        if (Physics2D.OverlapCircle(targetPosition, 0.1f, solidObjectLayer | npcLayer) != null)
-        {
-            return false;
-        }
-        return true;
     }
 
     private void RotateWeapon(float faceDirection)
@@ -109,4 +81,62 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
+    private void InteractionKey()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Interact();
+        }
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            Heal();
+        }
+    }
+    private void Interact()
+    {
+        //Vector3 facingDir = new Vector3(animator.GetFloat("MoveX"), animator.GetFloat("MoveY"));
+        //Vector3 interactPos = transform.position + facingDir; 
+
+        Collider2D entityCollider = Physics2D.OverlapCircle(transform.position, interactionRange, entityLayer);
+        if (entityCollider)
+        {
+            entityCollider.GetComponent<EntityInterface>()?.Interact();
+        }
+    }
+
+    public void Heal()
+    {
+
+        if (playerProperties.currentHealth < playerProperties.maxHealth && playerProperties.medbag > 0)
+        {
+            playerProperties.medbag--;
+            playerProperties.medbagUI.text = playerProperties.medbag.ToString();
+            if (playerProperties.currentHealth + (playerProperties.maxHealth * 0.3f) <= playerProperties.maxHealth)
+            {
+                playerProperties.currentHealth = playerProperties.currentHealth + (playerProperties.maxHealth * 0.3f);
+            }
+            else
+            {
+                playerProperties.currentHealth = playerProperties.maxHealth;
+            }
+            StartCoroutine(playerProperties.UpdateHealthUI());
+        }
+    }
+    public void Recharge()
+    {
+        if (playerProperties.currentMana < playerProperties.maxMana && playerProperties.battery > 0)
+        {
+            playerProperties.battery--;
+            playerProperties.batteryUI.text = playerProperties.battery.ToString();
+            if (playerProperties.currentMana + (playerProperties.maxMana * 0.5f) <= playerProperties.maxMana)
+            {
+                playerProperties.currentMana = playerProperties.currentMana + (playerProperties.maxMana * 0.5f);
+            }
+            else
+            {
+                playerProperties.currentMana = playerProperties.maxMana;
+            }
+            StartCoroutine(playerProperties.UpdateHealthUI());
+        }
+    }
 }

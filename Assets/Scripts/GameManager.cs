@@ -5,13 +5,15 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("UI")]
+    [SerializeField] internal GameObject InteractHintUI;
+    [SerializeField] internal GameObject CanvasUI;
 
     [Header("Player")]
     [SerializeField] internal Transform playerWeaponPosition;
     [SerializeField] internal LineRenderer weaponTargetingLine;
 
     [Header("Level")]
-    public int level = 0;
     public int killCount;
     public int gold;
     [SerializeField] TextMeshProUGUI killUI;
@@ -20,6 +22,11 @@ public class GameManager : MonoBehaviour
     [Header("Material")]
     public Material flashDamage_Material;
 
+    public enum UsableType
+    {
+        medbag,
+        battery
+    }
     public static GameManager Instance { get; set; }
 
     private void Awake()
@@ -31,7 +38,7 @@ public class GameManager : MonoBehaviour
         else
         {
             Instance = this;
-            DontDestroyOnLoad(Instance);
+            //DontDestroyOnLoad(Instance);
         }
     }
 

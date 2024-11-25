@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
 {
     public bool isMoving;
     public float maxHealth = 100;
+    public float expDrop = 10;
     public float health;
 
     [SerializeField] internal Transform targetTransform;
@@ -129,6 +130,8 @@ public class Enemy : MonoBehaviour
             isDead = true;
             rb.velocity = Vector2.zero;
             animator.SetTrigger("Death");
+
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().TakeExperince(expDrop);
         }
     }
 
