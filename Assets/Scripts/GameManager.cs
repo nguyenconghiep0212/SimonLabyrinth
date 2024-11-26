@@ -13,19 +13,26 @@ public class GameManager : MonoBehaviour
     [SerializeField] internal Transform playerWeaponPosition;
     [SerializeField] internal LineRenderer weaponTargetingLine;
 
+    [Header("VFX")]
+    [SerializeField] internal GameObject smokeWxplosionVFX;
+
     [Header("Level")]
     public int killCount;
     public int gold;
     [SerializeField] TextMeshProUGUI killUI;
     [SerializeField] TextMeshProUGUI goldlUI;
+    [SerializeField] internal GameObject goldPrefab;
+    [SerializeField] internal GameObject expOrbPrefab;
 
     [Header("Material")]
     public Material flashDamage_Material;
 
-    public enum UsableType
+    public enum Pickupable
     {
         medbag,
-        battery
+        battery,
+        gold,
+        exp
     }
     public static GameManager Instance { get; set; }
 
@@ -56,11 +63,43 @@ public class GameManager : MonoBehaviour
 
     public void UpdateKillCount()
     {
+        killCount++;
         killUI.text = killCount.ToString("N0");
     }
 
-    public void UpdateGold()
+    public void UpdateGold(int goldCount)
     {
+        gold += goldCount;
         goldlUI.text = gold.ToString("N0");
     }
+
+    public Vector3 SetRandomTargetPosition(Vector3 originalPosition, float throwRange)
+    {
+        Vector3 randomDirection = Random.insideUnitSphere; // Random direction in 3D space
+        Vector3 targetPosition = originalPosition + randomDirection.normalized * throwRange;
+        return targetPosition;
+    }
+
+    public IEnumerator UpdatePosition(GameObject item, Vector3 newPosition, float duration = 0.25f)
+    { 
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / duration;
+            try
+            {
+                item.transform.position = Vector3.Lerp(item.transform.position, newPosition, t);
+            }
+            catch (System.Exception)
+            {
+                print("Item has been picked up");
+            }
+            yield return null;
+        }
+        if (item) item.transform.position = newPosition;
+    }
+
+    
 }

@@ -12,6 +12,8 @@ public class Weapon : MonoBehaviour
     [SerializeField] float fireRate = 1000;
     [SerializeField] float range = 10f;
     [SerializeField] int numberOfTargetable = 1;
+    [SerializeField] bool isProjectile;
+    [SerializeField] internal GameObject projectilePrefab; 
 
     [SerializeField] LayerMask targetableLayer;
     [SerializeField] Vector3 offsetPosition;
@@ -134,13 +136,37 @@ public class Weapon : MonoBehaviour
         if (isReadyToShoot)
         {
             animator.SetTrigger("Shoot");
-            foreach (Transform target in closetTargets)
+            if (isProjectile)
             {
-                target.GetComponent<Enemy>().TakeDamage(damage);
+                ProjectileDamage();
             }
-            isReadyToShoot = false;
+            else
+            {
+                InstanceDamage();
+            }
+
         }
     }
+    private void InstanceDamage()
+    {
+        foreach (Transform target in closetTargets)
+        {
+            target.GetComponent<Enemy>().TakeDamage(damage);
+        }
+        isReadyToShoot = false;
+    }
+
+    private void ProjectileDamage()
+    {
+        foreach (Transform target in closetTargets)
+        {
+            GameObject projectile = GameObject.Instantiate(projectilePrefab, barrel.transform.position, Quaternion.identity);
+            projectile.GetComponent<Projectile>().target = target.gameObject;
+            projectile.GetComponent<Projectile>().damage = damage;
+        }
+        isReadyToShoot = false;
+    }
+     
 
     public void ReadyToShoot()
     {

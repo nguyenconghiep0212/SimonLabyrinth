@@ -3,13 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
     public bool isMoving;
     public float maxHealth = 100;
-    public float expDrop = 10;
+    public int expDrop = 2;
+    public int goldDrop = 5;
     public float health;
 
     [SerializeField] internal Transform targetTransform;
@@ -18,7 +20,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] internal float attackDistance = 3;
     [SerializeField] internal LayerMask playerLayer;
 
-    [Header("FLash Damaged")]
+    [Header("Flash Damaged")]
     [SerializeField] internal float damageFlashDuration;
     private Material originalMaterial;
     private SpriteRenderer spriteRenderer;
@@ -84,7 +86,6 @@ public class Enemy : MonoBehaviour
         }
     }
 
-
     private void CheckPlayerInAttackRange()
     {
         float distance = Vector3.Distance(targetTransform.position, transform.position);
@@ -125,13 +126,12 @@ public class Enemy : MonoBehaviour
         health -= damageTaken;
         if (health <= 0)
         {
-            GameManager.Instance.killCount++;
             GameManager.Instance.UpdateKillCount();
             isDead = true;
             rb.velocity = Vector2.zero;
-            animator.SetTrigger("Death");
 
-            GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().TakeExperince(expDrop);
+            DropLootOnDeath();
+            animator.SetTrigger("Death");
         }
     }
 
@@ -151,6 +151,31 @@ public class Enemy : MonoBehaviour
         spriteRenderer.material = originalMaterial;
         flashRoutine = null;
     }
+    public void DropLootOnDeath()
+    {
+        try
+        {
+            for (int i = 0; i < goldDrop; i++)
+            {
+                GameObject item = Instantiate(GameManager.Instance.goldPrefab, transform.position, Quaternion.identity);
+                Vector3 newPosition = GameManager.Instance.SetRandomTargetPosition(transform.position, 1f);
+                StartCoroutine(GameManager.Instance.UpdatePosition(item, newPosition));
+            }
+
+            for (int i = 0; i < expDrop; i++)
+            {
+                GameObject item = GameObject.Instantiate(GameManager.Instance.expOrbPrefab, transform.position, Quaternion.identity);
+                Vector3 newPosition = GameManager.Instance.SetRandomTargetPosition(transform.position, 1);
+                StartCoroutine(GameManager.Instance.UpdatePosition(item, newPosition));
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
+    }
+
+
 
     public void DestroyGameObject()
     {

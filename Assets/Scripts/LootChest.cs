@@ -22,8 +22,8 @@ public class LootChest : MonoBehaviour, EntityInterface
             foreach (GameObject itemPrefab in loots)
             {
                 GameObject item = GameObject.Instantiate(itemPrefab, transform.position, Quaternion.identity);
-                Vector3 newPosition = SetRandomTargetPosition();
-                StartCoroutine(UpdatePosition(item, newPosition));
+                Vector3 newPosition = GameManager.Instance.SetRandomTargetPosition(transform.position, throwRange);
+                StartCoroutine(GameManager.Instance.UpdatePosition(item, newPosition));
             }
         }
         isLooted = true;
@@ -31,34 +31,5 @@ public class LootChest : MonoBehaviour, EntityInterface
         baseClass.animator.SetBool("IsLooted", true);
     }
 
-    private Vector3 SetRandomTargetPosition()
-    {
-        Vector3 randomDirection = Random.insideUnitSphere; // Random direction in 3D space
-        Vector3 targetPosition = transform.position + randomDirection.normalized * throwRange;
-        return targetPosition;
-    }
-
-    private IEnumerator UpdatePosition(GameObject item, Vector3 newPosition)
-    {
-
-        float duration = 0.25f;
-        float elapsedTime = 0f;
-
-        while (elapsedTime < duration)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = elapsedTime / duration;
-            try
-            {
-                item.transform.position = Vector3.Lerp(item.transform.position, newPosition, t);
-            }
-            catch (System.Exception)
-            {
-                print("Item has been picked up");
-            }
-            yield return null;
-        }
-        if(item) item.transform.position = newPosition;
-
-    }
+    
 }

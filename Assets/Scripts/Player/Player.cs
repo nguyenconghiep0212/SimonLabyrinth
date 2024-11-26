@@ -104,7 +104,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            currentExp = earnedExp;
+            currentExp += earnedExp;
             expUI.fillAmount = currentExp / requiredExp;
         }
     }
