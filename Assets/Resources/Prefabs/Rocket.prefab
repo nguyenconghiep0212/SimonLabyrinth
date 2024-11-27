@@ -99,7 +99,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 735cde0e5f2f6e94d86714a04c317cbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movingSpeed: 3
+  projectileCollideVFX: {fileID: 1610434481343364561, guid: de7d020a5701eeb4594ddda3a9d063f1, type: 3}
+  movingSpeed: 10
 --- !u!50 &1564015343742999303
 Rigidbody2D:
   serializedVersion: 4

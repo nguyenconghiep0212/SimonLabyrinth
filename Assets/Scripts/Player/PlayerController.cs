@@ -12,7 +12,7 @@ public class PlayerControl : MonoBehaviour
 
     private Vector2 input;
 
-    private Animator animator;
+    internal Animator animator;
     private Rigidbody2D rb;
 
     public LayerMask entityLayer;
@@ -40,7 +40,10 @@ public class PlayerControl : MonoBehaviour
     // Update is called once per frame 
     void FixedUpdate()
     {
-        Move();
+        if (!playerProperties.isDead)
+        {
+            Move();
+        }
     }
 
     private void Move()
@@ -76,13 +79,23 @@ public class PlayerControl : MonoBehaviour
     {
         foreach (Transform child in GameManager.Instance.playerWeaponPosition)
         {
-            Animator animator = child.GetComponent<Animator>();
-            animator.SetFloat("MoveX", faceDirection);
+            if (child)
+            {
+                Animator animator = child.GetComponent<Animator>();
+                if (animator) animator.SetFloat("MoveX", faceDirection);
+            }
         }
     }
 
     private void InteractionKey()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if (playerProperties.hoverWeapon)
+            {
+                ChangeWeapon(playerProperties.hoverWeapon);
+            }
+        }
         if (Input.GetKeyDown(KeyCode.F))
         {
             Interact();
@@ -104,6 +117,25 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
+    public void ChangeWeapon(Weapon newWeapon)
+    {
+        Vector2 pickupPosition = newWeapon.transform.position;
+
+        if (playerProperties.currentWeapon) newWeapon.transform.SetParent(playerProperties.currentWeapon.transform.parent);
+        else newWeapon.transform.SetParent(transform.GetChild(1));
+        newWeapon.transform.localPosition = Vector3.zero;
+        newWeapon.isEquiped = true;
+
+        if (playerProperties.currentWeapon)
+        {
+            playerProperties.currentWeapon.transform.SetParent(null);
+            playerProperties.currentWeapon.transform.position = pickupPosition;
+            playerProperties.currentWeapon.transform.rotation = Quaternion.identity;
+            playerProperties.currentWeapon.isEquiped = false;
+        }
+
+        playerProperties.currentWeapon = newWeapon;
+    }
     public void Heal()
     {
 

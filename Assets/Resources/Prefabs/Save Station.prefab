@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2434152728497914088}
   - component: {fileID: 5154083813927943985}
   - component: {fileID: 5247576482769655600}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Save Station
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -195,7 +195,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 282e54feb9d5cdc468f12c489c930208, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionRange: 2
   hintPosition: {fileID: 393489136402458704}
   hint: Save
 --- !u!58 &5247576482769655600

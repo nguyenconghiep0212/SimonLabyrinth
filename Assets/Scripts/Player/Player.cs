@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 public class Player : MonoBehaviour
 {
@@ -16,8 +18,13 @@ public class Player : MonoBehaviour
     public int level = 0;
 
     public int medbag = 0;
-    public int battery = 0; 
+    public int battery = 0;
+    internal bool isDead;
     internal bool inCombat;
+
+    [Header("Weapon")]
+    [SerializeField] internal Weapon currentWeapon;
+    [SerializeField] internal Weapon hoverWeapon;
 
     [Header("UI")]
     public Image healthUI;
@@ -26,8 +33,10 @@ public class Player : MonoBehaviour
     public TextMeshProUGUI levelUI;
     public TextMeshProUGUI medbagUI;
     public TextMeshProUGUI batteryUI;
-
+    [SerializeField] internal Transform dialogPosition;
+ 
     private PlayerControl playerControl;
+    internal GameObject dialogUI;
     private void Awake()
     {
         playerControl = GetComponent<PlayerControl>();
@@ -40,11 +49,31 @@ public class Player : MonoBehaviour
     void Start()
     {
     }
+     
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
+        if (currentHealth <= 0)
+        {
+            Dying();
+        }
 
+        if (hoverWeapon)
+        {
+            if (!dialogUI)
+            {
+            UpdateDialog("Pick up " + hoverWeapon.trueName);
+            }
+            else
+            {
+                dialogUI.GetComponent<TextMeshProUGUI>().text = "Pick up " + hoverWeapon.trueName;
+            }
+        }
+        else
+        {
+            Destroy(dialogUI);
+        }
     }
 
     public void TakeDamage(float damageTaken)
@@ -86,7 +115,7 @@ public class Player : MonoBehaviour
             float t = elapsedTime / duration;
             manaUI.fillAmount = Mathf.Lerp(startFillAmount, targetFillAmount, t);
             yield return null;
-        } 
+        }
         manaUI.fillAmount = targetFillAmount;
     }
 
@@ -107,6 +136,24 @@ public class Player : MonoBehaviour
             currentExp += earnedExp;
             expUI.fillAmount = currentExp / requiredExp;
         }
+    }
+
+    public void UpdateDialog(string dialog)
+    {
+        dialogUI = GameObject.Instantiate(GameManager.Instance.InteractHintUI, GameManager.Instance.CanvasUI.transform);
+        dialogUI.GetComponent<InteractHintUI>().target = dialogPosition;
+        dialogUI.GetComponent<TextMeshProUGUI>().text = dialog;
+    }
+
+    private void Dying()
+    {
+        playerControl.animator.SetTrigger("Dying");
+        Destroy(currentWeapon);
+    }
+    public void Death()
+    {
+        isDead = true;
+        playerControl.animator.SetBool("Death", isDead);
     }
 
 }

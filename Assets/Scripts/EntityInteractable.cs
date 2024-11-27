@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class EntityInteractable : MonoBehaviour
 {
-    [SerializeField] float detectionRange = 2f;
     [SerializeField] Transform hintPosition;
     [SerializeField] string hint;
 
@@ -25,7 +24,8 @@ public class EntityInteractable : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            animator.SetTrigger("Open");
+            if (animator) animator.SetTrigger("Open");
+            DisplayHint();
         }
     }
 
@@ -33,11 +33,11 @@ public class EntityInteractable : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            animator.SetTrigger("Close");
+            if (animator) animator.SetTrigger("Close");
             RemoveHint();
         }
     }
-     
+
     public void DisplayHint()
     {
         hintUI = GameObject.Instantiate(GameManager.Instance.InteractHintUI, GameManager.Instance.CanvasUI.transform);
@@ -48,5 +48,6 @@ public class EntityInteractable : MonoBehaviour
     private void RemoveHint()
     {
         Destroy(hintUI);
-    } 
+        hintUI = null;
+    }
 }

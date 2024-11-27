@@ -131,14 +131,14 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 9
-      pivot: {x: 0.5, y: 0.1}
+      pivot: {x: 0.55, y: 0.1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 120ece015634f0546a50f86bcb07735e
-      internalID: -1719421174
+      spriteID: eb10a98d4a102c14394a5e869ff91f84
+      internalID: 75527820
       vertices: []
       indices: 
       edges: []
@@ -152,14 +152,14 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 9
-      pivot: {x: 0.5, y: 0.1}
+      pivot: {x: 0.55, y: 0.1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 92405fbeb5cc68a429ad9b542070c469
-      internalID: -40571242
+      spriteID: eb0c3ccd9a54bf14ca628e48b5866394
+      internalID: 1006002936
       vertices: []
       indices: 
       edges: []
@@ -175,8 +175,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      ShopKeeper_0: -1719421174
-      ShopKeeper_1: -40571242
+      ShopKeeper_0: 75527820
+      ShopKeeper_1: 1006002936
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -8,12 +8,14 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
 
+    [SerializeField] internal string trueName;
     [SerializeField] float damage;
     [SerializeField] float fireRate = 1000;
     [SerializeField] float range = 10f;
     [SerializeField] int numberOfTargetable = 1;
     [SerializeField] bool isProjectile;
-    [SerializeField] internal GameObject projectilePrefab; 
+    [SerializeField] internal bool isEquiped;
+    [SerializeField] internal GameObject projectilePrefab;
 
     [SerializeField] LayerMask targetableLayer;
     [SerializeField] Vector3 offsetPosition;
@@ -30,6 +32,8 @@ public class Weapon : MonoBehaviour
     }
     void Start()
     {
+        if (trueName == "") trueName = gameObject.name;
+
         for (int i = 0; i < numberOfTargetable; i++)
         {
             LineRenderer line = GameObject.Instantiate(GameManager.Instance.weaponTargetingLine, GameObject.FindGameObjectWithTag("Player").transform);
@@ -42,7 +46,10 @@ public class Weapon : MonoBehaviour
     }
     void Update()
     {
-        FindTarget();
+        if (isEquiped)
+        {
+            FindTarget();
+        }
     }
 
     public void Equiped()
@@ -89,7 +96,7 @@ public class Weapon : MonoBehaviour
 
         if (closetTargets.Count > 0)
         {
-            DrawTargetingLine();
+            //DrawTargetingLine();
             FaceToTargetDirection();
             Shoot();
 
@@ -144,7 +151,8 @@ public class Weapon : MonoBehaviour
             {
                 InstanceDamage();
             }
-
+            isReadyToShoot = false;
+            StartCoroutine(ReadyToShoot());
         }
     }
     private void InstanceDamage()
@@ -153,7 +161,7 @@ public class Weapon : MonoBehaviour
         {
             target.GetComponent<Enemy>().TakeDamage(damage);
         }
-        isReadyToShoot = false;
+
     }
 
     private void ProjectileDamage()
@@ -163,16 +171,34 @@ public class Weapon : MonoBehaviour
             GameObject projectile = GameObject.Instantiate(projectilePrefab, barrel.transform.position, Quaternion.identity);
             projectile.GetComponent<Projectile>().target = target.gameObject;
             projectile.GetComponent<Projectile>().damage = damage;
+            projectile.GetComponent<Projectile>().isHostile = false;
         }
-        isReadyToShoot = false;
     }
-     
 
-    public void ReadyToShoot()
+
+    private IEnumerator ReadyToShoot()
     {
+        yield return new WaitForSeconds(fireRate);
         isReadyToShoot = true;
     }
     #endregion
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            collision.GetComponent<Player>().hoverWeapon = this;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            if (collision.GetComponent<Player>().hoverWeapon == this)
+                collision.GetComponent<Player>().hoverWeapon = null;
+        }
+    }
 
     private void OnDrawGizmos()
     {
