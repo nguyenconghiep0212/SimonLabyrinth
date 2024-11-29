@@ -30,13 +30,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 974930838960138445}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 7.96, y: -8.06, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2396850772131868827}
   - {fileID: 2153223099281244331}
+  - {fileID: 390566948392758761}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7755306961104237486
@@ -103,7 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54586794a1da6084298d6ebab2ea0cc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movingSpeed: 5
+  movingSpeed: 2.5
   isMoving: 0
   entityLayer:
     serializedVersion: 2
@@ -129,12 +130,15 @@ MonoBehaviour:
   level: 0
   medbag: 0
   battery: 0
+  currentWeapon: {fileID: 0}
+  hoverWeapon: {fileID: 0}
   healthUI: {fileID: 0}
   manaUI: {fileID: 0}
   expUI: {fileID: 0}
   levelUI: {fileID: 0}
   medbagUI: {fileID: 0}
   batteryUI: {fileID: 0}
+  dialogPosition: {fileID: 390566948392758761}
 --- !u!95 &5014878830123422818
 Animator:
   serializedVersion: 5
@@ -328,7 +332,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 12
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -396,3 +400,34 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!1 &4723757526184988217
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 390566948392758761}
+  m_Layer: 7
+  m_Name: Dialog Position
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &390566948392758761
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4723757526184988217}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.08, y: 1.68, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2187530880227220299}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

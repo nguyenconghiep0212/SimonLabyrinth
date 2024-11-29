@@ -65,7 +65,13 @@ public class PlayerControl : MonoBehaviour
         animator.SetFloat("MoveX", faceDirection);
         animator.SetFloat("MoveY", input.y);
 
-        rb.velocity = new Vector2(input.x * movingSpeed, input.y * movingSpeed);
+        Vector2 currentSpeed = new Vector2(input.x * movingSpeed, input.y * movingSpeed); 
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            currentSpeed = currentSpeed * 1.5f;
+        }
+        print("currentSpeed:" + currentSpeed);
+        rb.velocity = currentSpeed;
         isMoving = rb.velocity != Vector2.zero;
 
         if (input == Vector2.zero)

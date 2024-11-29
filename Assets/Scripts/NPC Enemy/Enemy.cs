@@ -109,10 +109,10 @@ public class Enemy : MonoBehaviour
                 isPlayerInAttackZone = true;
                 if (animator.GetBool("IsAttackReady") && isPlayerInAttackZone)
                 {
-                    animator.SetTrigger("Attack"); 
+                    animator.SetTrigger("Attack");
                     if (GetComponent<Range>())
                     {
-                        GetComponent<Range>().Attack(); 
+                        GetComponent<Range>().Attack();
                     }
                 }
             }
@@ -129,13 +129,7 @@ public class Enemy : MonoBehaviour
         health -= damageTaken;
         if (health <= 0)
         {
-            GameManager.Instance.UpdateKillCount();
-            isDead = true;
-            rb.velocity = Vector2.zero;
-            rb.bodyType = RigidbodyType2D.Static;
-
-            DropLootOnDeath();
-            animator.SetTrigger("Death");
+            Death();
         }
     }
 
@@ -178,8 +172,29 @@ public class Enemy : MonoBehaviour
             Debug.Log(e);
         }
     }
+
+    public void Death()
+    {
+
+        GameManager.Instance.UpdateKillCount();
+        isDead = true;
+        rb.velocity = Vector2.zero;
+        rb.bodyType = RigidbodyType2D.Static;
+
+        DropLootOnDeath();
+        animator.SetTrigger("Death");
+
+    }
     public void DestroyGameObject()
     {
+        //REMOVE TARGET LINE IF EXIST
+        //if (transform.childCount > 1)
+        //{
+        //    Weapon currentPlayerWeapon = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().currentWeapon;
+        //    transform.GetChild(0).gameObject.SetActive(false);
+        //    transform.GetChild(0).SetParent(currentPlayerWeapon.transform);
+        //}
+
         Destroy(gameObject);
     }
 

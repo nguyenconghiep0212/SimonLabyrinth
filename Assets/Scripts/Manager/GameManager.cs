@@ -6,8 +6,12 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] internal GameObject InteractHintUI;
+    [SerializeField] internal GameObject InteractHintPrefab;
     [SerializeField] internal GameObject CanvasUI;
+    [SerializeField] internal GameObject VendorUI;
+    [SerializeField] internal GameObject VendorContentUI;
+    [SerializeField] internal GameObject VendorOptionPrefab;
+
 
     [Header("Player")]
     [SerializeField] internal Transform playerWeaponPosition;
@@ -50,7 +54,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        VendorUI.SetActive(false);
     }
 
     // Update is called once per frame
@@ -99,5 +103,12 @@ public class GameManager : MonoBehaviour
         if (item) item.transform.position = newPosition;
     }
 
-    
+    public void CloseVenderUI()
+    {
+        VendorUI.SetActive(false);
+        foreach (Transform child in VendorContentUI.transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
 }

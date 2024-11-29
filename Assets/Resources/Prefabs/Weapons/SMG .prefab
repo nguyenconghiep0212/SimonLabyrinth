@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 3985225380855372580}
   - component: {fileID: 4773566361610621321}
   - component: {fileID: 4246638860332327817}
+  - component: {fileID: 3785629298090155734}
   m_Layer: 0
   m_Name: 'SMG '
   m_TagString: Untagged
@@ -58,7 +59,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9220723820196155196}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -151,15 +152,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7f66066aeb09654ebc12dc437b58586, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 5
-  fireRate: 1
-  range: 10
+  trueName: SMG
+  damage: 35
+  fireRate: 0.5
+  range: 5
   numberOfTargetable: 1
   isProjectile: 0
-  projectilePrefab: {fileID: 0}
+  isEquiped: 0
+  cost: 800
   targetableLayer:
     serializedVersion: 2
     m_Bits: 64
   offsetPosition: {x: 0, y: 0, z: 0}
   barrel: {fileID: 4614337345301987069}
+  projectilePrefab: {fileID: 0}
+  icon: {fileID: 21300000, guid: 9e5e4430076efb641b91b507a4c5c3c5, type: 3}
   closetTargets: []
+--- !u!70 &3785629298090155734
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9220723820196155196}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.03240091, y: 0.008399782}
+  m_Size: {x: 1.0120019, y: 0.58960843}
+  m_Direction: 1

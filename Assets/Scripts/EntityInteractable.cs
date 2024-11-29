@@ -40,7 +40,8 @@ public class EntityInteractable : MonoBehaviour
 
     public void DisplayHint()
     {
-        hintUI = GameObject.Instantiate(GameManager.Instance.InteractHintUI, GameManager.Instance.CanvasUI.transform);
+        hintUI = GameObject.Instantiate(GameManager.Instance.InteractHintPrefab, GameManager.Instance.CanvasUI.transform);
+        hintUI.transform.SetAsFirstSibling();
         hintUI.GetComponent<InteractHintUI>().target = hintPosition;
         hintUI.GetComponent<TextMeshProUGUI>().text = hint;
     }

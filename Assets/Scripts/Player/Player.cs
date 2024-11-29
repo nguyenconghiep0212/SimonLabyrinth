@@ -40,14 +40,16 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         playerControl = GetComponent<PlayerControl>();
-        currentHealth = maxHealth;
-        currentMana = maxMana;
-        currentExp = 0;
-        expUI.fillAmount = currentExp;
+       
     }
     // Start is called before the first frame update
     void Start()
     {
+        currentHealth = maxHealth;
+        currentMana = maxMana;
+        currentExp = 0;
+        expUI.fillAmount = currentExp;
+        levelUI.text = level.ToString("N0");
     }
      
 
@@ -140,7 +142,8 @@ public class Player : MonoBehaviour
 
     public void UpdateDialog(string dialog)
     {
-        dialogUI = GameObject.Instantiate(GameManager.Instance.InteractHintUI, GameManager.Instance.CanvasUI.transform);
+        dialogUI = GameObject.Instantiate(GameManager.Instance.InteractHintPrefab, GameManager.Instance.CanvasUI.transform);
+        dialogUI.transform.SetAsFirstSibling();
         dialogUI.GetComponent<InteractHintUI>().target = dialogPosition;
         dialogUI.GetComponent<TextMeshProUGUI>().text = dialog;
     }
@@ -148,7 +151,7 @@ public class Player : MonoBehaviour
     private void Dying()
     {
         playerControl.animator.SetTrigger("Dying");
-        Destroy(currentWeapon);
+        currentWeapon.gameObject.SetActive(false);
     }
     public void Death()
     {

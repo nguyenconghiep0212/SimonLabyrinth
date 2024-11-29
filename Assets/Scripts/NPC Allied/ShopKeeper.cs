@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ShopKeeper : MonoBehaviour, EntityInterface
 {
+    [SerializeField] List<Weapon> weapons = new List<Weapon>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +20,18 @@ public class ShopKeeper : MonoBehaviour, EntityInterface
 
     public void Interact()
     {
-        print("ShopKeeper: Let player buy weapon");
+        InitWeaponOption();
+        
+    }
+
+    public void InitWeaponOption()
+    {
+        foreach (Weapon weapon in weapons)
+        {
+            GameObject weaponOption = Instantiate(GameManager.Instance.VendorOptionPrefab, GameManager.Instance.VendorContentUI.transform);
+            weaponOption.GetComponent<VendorOption>().weaponPrefab = weapon;
+            weaponOption.GetComponent<VendorOption>().InitOption();
+        }
+        GameManager.Instance.VendorUI.SetActive(true);
     }
 }

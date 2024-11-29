@@ -8,35 +8,48 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
 
+    [Header("Primitive Properties")]
     [SerializeField] internal string trueName;
-    [SerializeField] float damage;
-    [SerializeField] float fireRate = 1000;
-    [SerializeField] float range = 10f;
-    [SerializeField] int numberOfTargetable = 1;
+
+    [Range(0f, 300f)]
+    [SerializeField] internal float damage = 100;
+    [Range(0.5f, 5f)]
+    [SerializeField] internal float fireRate = 1;
+    [Range(5f, 12f)]
+    [SerializeField] internal float range = 7f;
+    [Range(1f, 3)]
+    [SerializeField] internal int numberOfTargetable = 1;
+
     [SerializeField] bool isProjectile;
     [SerializeField] internal bool isEquiped;
-    [SerializeField] internal GameObject projectilePrefab;
+    [SerializeField] internal int cost;
 
+    [Header("Object Properties")]
     [SerializeField] LayerMask targetableLayer;
     [SerializeField] Vector3 offsetPosition;
     [SerializeField] Transform barrel;
+
+    [Header("Misc")]
+    [SerializeField] internal GameObject projectilePrefab;
+    [SerializeField] internal Sprite icon;
+
 
     public List<Transform> closetTargets;
 
     private Animator animator;
     private bool isReadyToShoot = true;
-    private List<LineRenderer> targetingLine = new List<LineRenderer>();
+    public List<LineRenderer> targetingLine = new List<LineRenderer>();
     private void Awake()
     {
-        animator = GetComponent<Animator>();
     }
     void Start()
     {
+        animator = GetComponent<Animator>();
         if (trueName == "") trueName = gameObject.name;
 
         for (int i = 0; i < numberOfTargetable; i++)
         {
-            LineRenderer line = GameObject.Instantiate(GameManager.Instance.weaponTargetingLine, GameObject.FindGameObjectWithTag("Player").transform);
+            LineRenderer line = GameObject.Instantiate(GameManager.Instance.weaponTargetingLine, transform);
             targetingLine.Add(line);
         }
         foreach (LineRenderer line in targetingLine)
@@ -96,7 +109,7 @@ public class Weapon : MonoBehaviour
 
         if (closetTargets.Count > 0)
         {
-            //DrawTargetingLine();
+            DrawTargetingLine();
             FaceToTargetDirection();
             Shoot();
 
@@ -121,6 +134,9 @@ public class Weapon : MonoBehaviour
             targetingLine[i].gameObject.SetActive(true);
             targetingLine[i].SetPosition(0, barrel.position);
             targetingLine[i].SetPosition(1, closetTargets[i].position);
+
+            //targetingLine[i].transform.SetParent(closetTargets[i]);
+            //targetingLine[i].transform.SetAsFirstSibling();
         }
     }
 

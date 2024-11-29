@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 9034142206916280429}
   - component: {fileID: 4570696508217085249}
   - component: {fileID: 8428829534687205783}
+  - component: {fileID: 3963144628107719101}
   m_Layer: 0
   m_Name: 'Sniper Rifle '
   m_TagString: Untagged
@@ -58,7 +59,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5602249913351312133}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -151,15 +152,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7f66066aeb09654ebc12dc437b58586, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 50
+  trueName: Sniper Rifle
+  damage: 175
   fireRate: 2
   range: 10
   numberOfTargetable: 1
   isProjectile: 0
-  projectilePrefab: {fileID: 0}
+  isEquiped: 0
+  cost: 1250
   targetableLayer:
     serializedVersion: 2
     m_Bits: 64
   offsetPosition: {x: 0, y: 0, z: 0}
   barrel: {fileID: 7229910288296634021}
+  projectilePrefab: {fileID: 0}
+  icon: {fileID: 21300000, guid: b479bb871fdfbc44f9693cf4ba991d18, type: 3}
   closetTargets: []
+--- !u!70 &3963144628107719101
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5602249913351312133}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.07400442, y: 0.011683963}
+  m_Size: {x: 2.0048814, y: 0.65727144}
+  m_Direction: 1

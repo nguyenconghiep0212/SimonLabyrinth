@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3307640197693690342}
   - component: {fileID: 6563943912790976150}
   - component: {fileID: 776223031592065251}
+  - component: {fileID: 4567747852130858559}
   m_Layer: 0
   m_Name: 'Plasma Blaster '
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3486955632834082448}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -120,18 +121,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7f66066aeb09654ebc12dc437b58586, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 5
-  fireRate: 1
-  range: 10
-  numberOfTargetable: 1
+  trueName: Plasma Blaster
+  damage: 125
+  fireRate: 1.5
+  range: 9
+  numberOfTargetable: 2
   isProjectile: 0
-  projectilePrefab: {fileID: 0}
+  isEquiped: 0
+  cost: 2500
   targetableLayer:
     serializedVersion: 2
     m_Bits: 64
   offsetPosition: {x: 0, y: 0, z: 0}
   barrel: {fileID: 4514840619836324392}
+  projectilePrefab: {fileID: 0}
+  icon: {fileID: 21300000, guid: 9eda248ddb6737844a8c4811cdf96db0, type: 3}
   closetTargets: []
+--- !u!70 &4567747852130858559
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3486955632834082448}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.009735517, y: 0.072055645}
+  m_Size: {x: 1.7049719, y: 0.8559017}
+  m_Direction: 1
 --- !u!1 &8500100803058527835
 GameObject:
   m_ObjectHideFlags: 0
