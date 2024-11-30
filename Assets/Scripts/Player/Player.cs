@@ -26,16 +26,10 @@ public class Player : MonoBehaviour
     [SerializeField] internal Weapon currentWeapon;
     [SerializeField] internal Weapon hoverWeapon;
 
-    [Header("UI")]
-    public Image healthUI;
-    public Image manaUI;
-    public Image expUI;
-    public TextMeshProUGUI levelUI;
-    public TextMeshProUGUI medbagUI;
-    public TextMeshProUGUI batteryUI;
+    [Header("UI")] 
     [SerializeField] internal Transform dialogPosition;
  
-    private PlayerControl playerControl;
+    internal PlayerControl playerControl;
     internal GameObject dialogUI;
     private void Awake()
     {
@@ -48,8 +42,8 @@ public class Player : MonoBehaviour
         currentHealth = maxHealth;
         currentMana = maxMana;
         currentExp = 0;
-        expUI.fillAmount = currentExp;
-        levelUI.text = level.ToString("N0");
+        GameManager.Instance.expUI.fillAmount = currentExp;
+        GameManager.Instance.levelUI.text = level.ToString("N0");
     }
      
 
@@ -88,7 +82,7 @@ public class Player : MonoBehaviour
     internal IEnumerator UpdateHealthUI()
     {
         float targetFillAmount = currentHealth / maxHealth;
-        float startFillAmount = healthUI.fillAmount;
+        float startFillAmount = GameManager.Instance.healthUI.fillAmount;
         float duration = 0.25f; // Duration of the transition
         float elapsedTime = 0f;
 
@@ -96,18 +90,18 @@ public class Player : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / duration;
-            healthUI.fillAmount = Mathf.Lerp(startFillAmount, targetFillAmount, t);
+            GameManager.Instance.healthUI.fillAmount = Mathf.Lerp(startFillAmount, targetFillAmount, t);
             yield return null; // Wait for the next frame
         }
 
         // Ensure the final value is set
-        healthUI.fillAmount = targetFillAmount;
+        GameManager.Instance.healthUI.fillAmount = targetFillAmount;
     }
 
     internal IEnumerator UpdateManaUI()
     {
         float targetFillAmount = currentMana / maxMana;
-        float startFillAmount = manaUI.fillAmount;
+        float startFillAmount = GameManager.Instance.manaUI.fillAmount;
         float duration = 0.25f;
         float elapsedTime = 0f;
 
@@ -115,10 +109,10 @@ public class Player : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / duration;
-            manaUI.fillAmount = Mathf.Lerp(startFillAmount, targetFillAmount, t);
+            GameManager.Instance.manaUI.fillAmount = Mathf.Lerp(startFillAmount, targetFillAmount, t);
             yield return null;
         }
-        manaUI.fillAmount = targetFillAmount;
+        GameManager.Instance.manaUI.fillAmount = targetFillAmount;
     }
 
 
@@ -129,14 +123,14 @@ public class Player : MonoBehaviour
             level++;
             float expLeft = earnedExp - (requiredExp - currentExp);
             requiredExp = requiredExp + (requiredExp * 0.2f);
-            levelUI.text = level.ToString("N0");
+            GameManager.Instance.levelUI.text = level.ToString("N0");
             currentExp = 0;
             TakeExperince(expLeft);
         }
         else
         {
             currentExp += earnedExp;
-            expUI.fillAmount = currentExp / requiredExp;
+            GameManager.Instance.expUI.fillAmount = currentExp / requiredExp;
         }
     }
 

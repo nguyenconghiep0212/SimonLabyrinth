@@ -2,21 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] internal GameObject InteractHintPrefab;
     [SerializeField] internal GameObject CanvasUI;
+    [SerializeField] internal GameObject PlayerUI;
+    [SerializeField] internal GameObject StatUI;
     [SerializeField] internal GameObject VendorUI;
     [SerializeField] internal GameObject VendorContentUI;
     [SerializeField] internal GameObject VendorOptionPrefab;
 
 
     [Header("Player")]
-    [SerializeField] internal Transform playerWeaponPosition;
+    [SerializeField] internal Image healthUI;
+    [SerializeField] internal Image manaUI;
+    [SerializeField] internal Image expUI;
+    [SerializeField] internal TextMeshProUGUI levelUI;
+    [SerializeField] internal TextMeshProUGUI medbagUI;
+    [SerializeField] internal TextMeshProUGUI batteryUI;
     [SerializeField] internal LineRenderer weaponTargetingLine;
-     
+
 
     [Header("Level")]
     public int killCount;
@@ -47,31 +56,36 @@ public class GameManager : MonoBehaviour
         else
         {
             Instance = this;
-            //DontDestroyOnLoad(Instance);
+            DontDestroyOnLoad(Instance);
         }
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        VendorUI.SetActive(false);
+        if (SceneManager.GetActiveScene().name == "Menu")
+        {
+            PlayerUI.SetActive(false);
+            StatUI.SetActive(false);
+            VendorUI.SetActive(false);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    public void UpdateKillCount()
+    public void UpdateKillCount(int additionalKill = 1)
     {
-        killCount++;
+        killCount += additionalKill;
         killUI.text = killCount.ToString("N0");
     }
 
-    public void UpdateGold(int goldCount)
+    public void UpdateGold(int additionalGold)
     {
-        gold += goldCount;
+        gold += additionalGold;
         goldlUI.text = gold.ToString("N0");
     }
 
@@ -83,7 +97,7 @@ public class GameManager : MonoBehaviour
     }
 
     public IEnumerator UpdatePosition(GameObject item, Vector3 newPosition, float duration = 0.25f)
-    { 
+    {
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)

@@ -12,6 +12,7 @@ public class PlayerControl : MonoBehaviour
 
     private Vector2 input;
 
+    [SerializeField] Transform weaponPosition;
     internal Animator animator;
     private Rigidbody2D rb;
 
@@ -70,7 +71,6 @@ public class PlayerControl : MonoBehaviour
         {
             currentSpeed = currentSpeed * 1.5f;
         }
-        print("currentSpeed:" + currentSpeed);
         rb.velocity = currentSpeed;
         isMoving = rb.velocity != Vector2.zero;
 
@@ -82,8 +82,8 @@ public class PlayerControl : MonoBehaviour
     }
 
     private void RotateWeapon(float faceDirection)
-    {
-        foreach (Transform child in GameManager.Instance.playerWeaponPosition)
+    { 
+        foreach (Transform child in weaponPosition)
         {
             if (child)
             {
@@ -95,20 +95,24 @@ public class PlayerControl : MonoBehaviour
 
     private void InteractionKey()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyUp(KeyCode.R))
         {
             if (playerProperties.hoverWeapon)
             {
                 ChangeWeapon(playerProperties.hoverWeapon);
             }
         }
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyUp(KeyCode.F))
         {
             Interact();
         }
-        if (Input.GetKeyDown(KeyCode.H))
+        if (Input.GetKeyUp(KeyCode.H))
         {
             Heal();
+        }
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            MenuManager.Instance.OpenMainMenu();
         }
     }
     private void Interact()
@@ -148,7 +152,7 @@ public class PlayerControl : MonoBehaviour
         if (playerProperties.currentHealth < playerProperties.maxHealth && playerProperties.medbag > 0)
         {
             playerProperties.medbag--;
-            playerProperties.medbagUI.text = playerProperties.medbag.ToString();
+            GameManager.Instance.medbagUI.text = playerProperties.medbag.ToString();
             if (playerProperties.currentHealth + (playerProperties.maxHealth * 0.3f) <= playerProperties.maxHealth)
             {
                 playerProperties.currentHealth = playerProperties.currentHealth + (playerProperties.maxHealth * 0.3f);
@@ -165,7 +169,7 @@ public class PlayerControl : MonoBehaviour
         if (playerProperties.currentMana < playerProperties.maxMana && playerProperties.battery > 0)
         {
             playerProperties.battery--;
-            playerProperties.batteryUI.text = playerProperties.battery.ToString();
+            GameManager.Instance.batteryUI.text = playerProperties.battery.ToString();
             if (playerProperties.currentMana + (playerProperties.maxMana * 0.5f) <= playerProperties.maxMana)
             {
                 playerProperties.currentMana = playerProperties.currentMana + (playerProperties.maxMana * 0.5f);

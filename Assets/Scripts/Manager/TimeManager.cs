@@ -16,6 +16,7 @@ public class TimeManagement : MonoBehaviour
         else
         {
             Instance = this;
+            DontDestroyOnLoad(Instance);
         }
     }
 

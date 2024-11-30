@@ -15,11 +15,11 @@ public class Pickupable : MonoBehaviour
             {
                 case GameManager.Pickupable.medbag:
                     GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().medbag++;
-                    GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().medbagUI.text = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().medbag.ToString();
+                    GameManager.Instance.medbagUI.text = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().medbag.ToString();
                     break;
                 case GameManager.Pickupable.battery:
                     GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().battery++;
-                    GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().batteryUI.text = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().battery.ToString();
+                    GameManager.Instance.batteryUI.text = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().battery.ToString();
                     break;
                 case GameManager.Pickupable.gold:
                     GameManager.Instance.UpdateGold(1); 
