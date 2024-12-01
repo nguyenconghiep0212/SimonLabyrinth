@@ -4,18 +4,38 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    public static SoundManager Instance { get; set; }
+    // Static instance of the GameManager
+    private static SoundManager instance;
+    // Property to access the instance
+    public static SoundManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<SoundManager>();
 
+                if (instance == null)
+                {
+                    GameObject singletonObject = new GameObject();
+                    instance = singletonObject.AddComponent<SoundManager>();
+                    singletonObject.name = typeof(SoundManager).ToString() + " (Singleton)";
+                }
+            }
+            return instance;
+        }
+    }
     private void Awake()
     {
-        if (Instance != null & Instance != this)
+        if (instance != null & instance != this)
         {
-            Destroy(this);
+            Destroy(gameObject);
+            return;
         }
         else
         {
-            Instance = this;
-            DontDestroyOnLoad(Instance);
+            instance = this;
+            DontDestroyOnLoad(instance);
         }
     }
 }

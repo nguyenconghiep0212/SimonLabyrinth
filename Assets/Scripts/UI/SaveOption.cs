@@ -25,6 +25,8 @@ public class SaveOption : MonoBehaviour
     [SerializeField] internal bool inCurrentUse;
     [SerializeField] internal string savePath;
 
+    [SerializeField] internal GameObject deleteButtonUI;
+
 
     private void Start()
     {
@@ -33,39 +35,58 @@ public class SaveOption : MonoBehaviour
     }
     public void SelectSave()
     {
- 
         SaveManager.Instance.currentSave = this;
-        SaveManager.Instance.LoadGame();
+        if (isUsed)
+        {
+            SaveManager.Instance.LoadGame();
+        }
+        else
+        {
+            MenuManager.Instance.OpenCharacterSelecetionUI();
+        }
     }
 
     public void DeleteSave()
     {
         isUsed = false;
         File.Delete(savePath);
+        newSave.SetActive(true);
+        usedSave.SetActive(false);
+        deleteButtonUI.SetActive(false);
     }
 
     public void FillSavedContentToUI()
-    { 
+    {
         if (File.Exists(savePath))
         {
             isUsed = true;
             newSave.SetActive(false);
             usedSave.SetActive(true);
-            
+
             SaveData saveData = JsonUtility.FromJson<SaveData>(File.ReadAllText(savePath));
             goldCount.text = saveData.goldCount.ToString("N0");
             killCount.text = saveData.killCount.ToString("N0");
             levelCount.text = saveData.levelCount.ToString("N0");
-            //characterIcon.sprite = 
-            //weaponIcon.sprite = saveData.playerWeapon.icon;
             medBagCount.text = saveData.medBagCount.ToString("N0");
             batteryCount.text = saveData.batteryCount.ToString("N0");
 
+            characterIcon.sprite = GameManager.Instance.GetCharacterIcon(saveData.characterID);
+            weaponIcon.sprite = saveData.playerWeaponID != -1 ? GameManager.Instance.GetPlayerSavedWeapon(saveData.playerWeaponID).icon : null;
+            if (!weaponIcon.sprite)
+            {
+                Color originalColor = weaponIcon.color;
+                originalColor.a = 0;
+                weaponIcon.color = originalColor;
+            }
+
+            deleteButtonUI.SetActive(true);
         }
         else
         {
             newSave.SetActive(true);
             usedSave.SetActive(false);
+
+            deleteButtonUI.SetActive(false);
         }
     }
 }

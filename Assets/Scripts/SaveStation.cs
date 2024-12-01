@@ -8,7 +8,10 @@ public class SaveStation : MonoBehaviour, EntityInterface
 
     public void Interact()
     {
+        baseClass.animator.SetTrigger("Save"); 
+        baseClass.animator.SetBool("IsSaving", true); 
         SaveManager.Instance.Save();
+        baseClass.animator.SetBool("IsSaving", false);
     }
 
     // Start is called before the first frame update

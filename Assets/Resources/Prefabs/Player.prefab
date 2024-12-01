@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayerID: 1339089251
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: -115663443, guid: 61d925c80b4c4f84ea2214e69b2d9702, type: 3}
+  m_Sprite: {fileID: 2070694635, guid: 6d5aec785397e584b8b68de2490af542, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -106,6 +106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movingSpeed: 2.5
   isMoving: 0
+  weaponPosition: {fileID: 2153223099281244331}
   entityLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -132,12 +133,6 @@ MonoBehaviour:
   battery: 0
   currentWeapon: {fileID: 0}
   hoverWeapon: {fileID: 0}
-  healthUI: {fileID: 0}
-  manaUI: {fileID: 0}
-  expUI: {fileID: 0}
-  levelUI: {fileID: 0}
-  medbagUI: {fileID: 0}
-  batteryUI: {fileID: 0}
   dialogPosition: {fileID: 390566948392758761}
 --- !u!95 &5014878830123422818
 Animator:
@@ -149,7 +144,7 @@ Animator:
   m_GameObject: {fileID: 974930838960138445}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 798d3664309ffb74ba58f53c825742c6, type: 2}
+  m_Controller: {fileID: 9100000, guid: cd4542e00a565994fa1b3b79d2fdec48, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -222,8 +217,8 @@ BoxCollider2D:
   m_Offset: {x: -0.084589124, y: 0.17338198}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
-    oldSize: {x: 0.625, y: 1.625}
+    pivot: {x: 0.6, y: 0.15}
+    oldSize: {x: 2.5, y: 2}
     newSize: {x: 2, y: 2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

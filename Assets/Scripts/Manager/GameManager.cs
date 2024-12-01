@@ -1,12 +1,50 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+
+    // Static instance of the GameManager
+    private static GameManager instance; 
+    // Property to access the instance
+    public static GameManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<GameManager>();
+
+                if (instance == null)
+                {
+                    GameObject singletonObject = new GameObject();
+                    instance = singletonObject.AddComponent<GameManager>();
+                    singletonObject.name = typeof(GameManager).ToString() + " (Singleton)";
+                }
+            }
+            return instance;
+        }
+    } 
+    private void Awake()
+    {
+        if (instance != null & instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(instance);
+        }
+    }
+
     [Header("UI")]
     [SerializeField] internal GameObject InteractHintPrefab;
     [SerializeField] internal GameObject CanvasUI;
@@ -16,8 +54,20 @@ public class GameManager : MonoBehaviour
     [SerializeField] internal GameObject VendorContentUI;
     [SerializeField] internal GameObject VendorOptionPrefab;
 
+    [Header("Playable Characters")]
+    [SerializeField] internal AnimatorController HeinrichVonKropp_Animator;
+    [SerializeField] internal AnimatorController ChrisTirtaKohler_Animator;
+    [SerializeField] internal AnimatorController IreneeCyrilleLoritz_Animator;
+    [SerializeField] internal Sprite HeinrichVonKropp_Idle;
+    [SerializeField] internal Sprite ChrisTirtaKohler_Idle;
+    [SerializeField] internal Sprite IreneeCyrilleLoritz_Idle;
+    [SerializeField] internal Sprite HeinrichVonKropp_Icon;
+    [SerializeField] internal Sprite ChrisTirtaKohler_Icon;
+    [SerializeField] internal Sprite IreneeCyrilleLoritz_Icon;
+
 
     [Header("Player")]
+    [SerializeField] internal PlayableCharacter selectedCharacter;
     [SerializeField] internal Image healthUI;
     [SerializeField] internal Image manaUI;
     [SerializeField] internal Image expUI;
@@ -25,6 +75,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] internal TextMeshProUGUI medbagUI;
     [SerializeField] internal TextMeshProUGUI batteryUI;
     [SerializeField] internal LineRenderer weaponTargetingLine;
+    [SerializeField] internal List<Weapon> totalWeaponList;
 
 
     [Header("Level")]
@@ -38,26 +89,29 @@ public class GameManager : MonoBehaviour
     [Header("Material")]
     public Material flashDamage_Material;
 
+    public enum WeaponEnum
+    {
+        StandardRifle,
+        SMG,
+        BattleRifle,
+        SmartRifle,
+        LaserRifle,
+        SniperRifle,
+        PlasmaBlaster,
+        RocketLauncher
+    }
+    public enum PlayableCharacter
+    {
+        HeinrichVonKropp,
+        ChrisTirtaKohler,
+        IreneeCyrilleLoritz
+    }
     public enum Pickupable
     {
         medbag,
         battery,
         gold,
         exp
-    }
-    public static GameManager Instance { get; set; }
-
-    private void Awake()
-    {
-        if (Instance != null & Instance != this)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(Instance);
-        }
     }
 
     // Start is called before the first frame update
@@ -124,5 +178,55 @@ public class GameManager : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+    }
+
+    public void ApplySelectedCharacterToPlayer(PlayableCharacter character)
+    {
+        selectedCharacter = character;
+        SaveManager.Instance.LoadGame();
+    }
+    public void InitPlayer()
+    {
+        switch (selectedCharacter)
+        {
+            case PlayableCharacter.HeinrichVonKropp:
+                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControl>().animator.runtimeAnimatorController = HeinrichVonKropp_Animator;
+                GameObject.FindGameObjectWithTag("Player").GetComponent<SpriteRenderer>().sprite = HeinrichVonKropp_Idle;
+                break;
+            case PlayableCharacter.ChrisTirtaKohler:
+                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControl>().animator.runtimeAnimatorController = ChrisTirtaKohler_Animator;
+                GameObject.FindGameObjectWithTag("Player").GetComponent<SpriteRenderer>().sprite = ChrisTirtaKohler_Idle;
+                break;
+            case PlayableCharacter.IreneeCyrilleLoritz:
+                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControl>().animator.runtimeAnimatorController = IreneeCyrilleLoritz_Animator;
+                GameObject.FindGameObjectWithTag("Player").GetComponent<SpriteRenderer>().sprite = IreneeCyrilleLoritz_Idle;
+                break;
+        }
+        PlayerUI.transform.GetChild(0).GetComponent<Image>().sprite = GetCharacterIcon(selectedCharacter);
+    }
+
+    public Sprite GetCharacterIcon(PlayableCharacter character)
+    {
+        switch (character)
+        {
+            case PlayableCharacter.HeinrichVonKropp:
+                return HeinrichVonKropp_Icon;
+            case PlayableCharacter.ChrisTirtaKohler:
+                return ChrisTirtaKohler_Icon;
+            case PlayableCharacter.IreneeCyrilleLoritz:
+                return IreneeCyrilleLoritz_Icon;
+            default:
+                return null;
+        }
+    }
+    public Weapon GetPlayerSavedWeapon(int? weaponId)
+    {
+        if (weaponId != null)
+        {
+            Weapon prefab = totalWeaponList.First(item => (int)item.id == weaponId);
+            GameObject finalWeapon = Instantiate(prefab.gameObject); 
+            return finalWeapon.GetComponent<Weapon>();
+        }
+        return null;
     }
 }

@@ -9,6 +9,7 @@ public class Weapon : MonoBehaviour
 {
 
     [Header("Primitive Properties")]
+    [SerializeField] internal GameManager.WeaponEnum id;
     [SerializeField] internal string trueName;
 
     [Range(0f, 300f)]
@@ -63,11 +64,6 @@ public class Weapon : MonoBehaviour
         {
             FindTarget();
         }
-    }
-
-    public void Equiped()
-    {
-
     }
 
     #region ---- || ATTACKING || ----

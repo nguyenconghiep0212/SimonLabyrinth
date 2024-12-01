@@ -3,15 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class SaveData 
+public class SaveData
 {
+    public string currentScene;
+
+    // PLAYER PROPERTIES
+    public GameManager.PlayableCharacter characterID;
     public Vector3 playerPosition;
-    public int goldCount;
-    public int killCount;
-    public int levelCount;
+    public int playerWeaponID;
     public int medBagCount;
     public int batteryCount;
-    public string characterID;
-    public string playerWeaponID;
-    public string currentScene;
+    public int levelCount;
+    public float currentHealth;
+    public float currentMana;
+    public float currentExp;
+    public float maxHealth;
+    public float maxMana;
+    public float reqExp;
+
+    // STATS
+    public int goldCount;
+    public int killCount;
 }

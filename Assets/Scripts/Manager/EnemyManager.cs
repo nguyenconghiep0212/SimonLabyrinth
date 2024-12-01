@@ -5,7 +5,22 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
+
+    // Property to access the instance
     public static EnemyManager Instance { get; set; }
+
+    private void Awake()
+    {
+        if (Instance != null & Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
 
     [SerializeField] bool hasInitSpawn;
     [SerializeField] List<SpawnClass> spawnList = new List<SpawnClass>();
@@ -21,17 +36,7 @@ public class EnemyManager : MonoBehaviour
             return _listEnemy.Count;
         }
     }
-    private void Awake()
-    {
-        if (Instance != null & Instance != this)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            Instance = this;
-        }
-    }
+
 
     float timer;
     // Start is called before the first frame update
@@ -87,7 +92,7 @@ public class EnemyManager : MonoBehaviour
     {
         _listEnemy.RemoveAll(e => e == null);
         if (currentEnemyCount < maxSpawn)
-        { 
+        {
             float randomValue = Random.value;
             float cumulativeChance = 0f;
 

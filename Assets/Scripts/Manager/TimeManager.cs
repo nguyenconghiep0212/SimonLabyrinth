@@ -5,18 +5,38 @@ using UnityEngine;
 public class TimeManagement : MonoBehaviour
 {
 
-    public static TimeManagement Instance { get; set; }
+    // Static instance of the GameManager
+    private static TimeManagement instance;
+    // Property to access the instance
+    public static TimeManagement Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<TimeManagement>();
 
+                if (instance == null)
+                {
+                    GameObject singletonObject = new GameObject();
+                    instance = singletonObject.AddComponent<TimeManagement>();
+                    singletonObject.name = typeof(TimeManagement).ToString() + " (Singleton)";
+                }
+            }
+            return instance;
+        }
+    }
     private void Awake()
     {
-        if (Instance != null & Instance != this)
+        if (instance != null & instance != this)
         {
-            Destroy(this);
+            Destroy(gameObject);
+            return;
         }
         else
         {
-            Instance = this;
-            DontDestroyOnLoad(Instance);
+            instance = this;
+            DontDestroyOnLoad(instance);
         }
     }
 

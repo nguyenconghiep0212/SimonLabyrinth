@@ -26,15 +26,15 @@ public class Player : MonoBehaviour
     [SerializeField] internal Weapon currentWeapon;
     [SerializeField] internal Weapon hoverWeapon;
 
-    [Header("UI")] 
+    [Header("UI")]
     [SerializeField] internal Transform dialogPosition;
- 
+
     internal PlayerControl playerControl;
     internal GameObject dialogUI;
     private void Awake()
     {
         playerControl = GetComponent<PlayerControl>();
-       
+
     }
     // Start is called before the first frame update
     void Start()
@@ -45,7 +45,7 @@ public class Player : MonoBehaviour
         GameManager.Instance.expUI.fillAmount = currentExp;
         GameManager.Instance.levelUI.text = level.ToString("N0");
     }
-     
+
 
     // Update is called once per frame
     void FixedUpdate()
@@ -59,7 +59,7 @@ public class Player : MonoBehaviour
         {
             if (!dialogUI)
             {
-            UpdateDialog("Pick up " + hoverWeapon.trueName);
+                UpdateDialog("Pick up " + hoverWeapon.trueName);
             }
             else
             {
@@ -145,7 +145,10 @@ public class Player : MonoBehaviour
     private void Dying()
     {
         playerControl.animator.SetTrigger("Dying");
-        currentWeapon.gameObject.SetActive(false);
+        if (currentWeapon)
+        {
+            currentWeapon.gameObject.SetActive(false);
+        }
     }
     public void Death()
     {
